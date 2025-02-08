@@ -3,6 +3,7 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Cont
 from fastapi import FastAPI, Request
 import logging
 import httpx
+import asyncio
 from fastapi.responses import JSONResponse
 
 # Constants
@@ -116,6 +117,7 @@ async def startup_event():
     logger.info("Telegram Bot Initialized!")
     await telegram_app.initialize()
     await telegram_app.start()
+    asyncio.create_task(telegram_app.updater.start_polling())
 
 @app.post("/webhook")
 async def webhook(request: Request):
