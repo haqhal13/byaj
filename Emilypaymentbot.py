@@ -115,6 +115,7 @@ async def startup_event():
 
     logger.info("Telegram Bot Initialized!")
     await telegram_app.initialize()
+    await telegram_app.start()
 
 @app.post("/webhook")
 async def webhook(request: Request):
@@ -122,3 +123,4 @@ async def webhook(request: Request):
     update = Update.de_json(await request.json(), telegram_app.bot)
     await telegram_app.process_update(update)
     return {"status": "ok"}
+
