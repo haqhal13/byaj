@@ -3,8 +3,7 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Cont
 from fastapi import FastAPI, Request
 import logging
 import httpx
-from datetime import datetime
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import JSONResponse
 
 # Constants
 BOT_TOKEN = "8112844294:AAEtMJWt5kiTDRMs2WmqzYaJL-1-1aOrCo8"
@@ -25,8 +24,6 @@ logger = logging.getLogger("bot")
 # FastAPI App
 app = FastAPI()
 telegram_app = None
-START_TIME = datetime.now()
-
 
 # Handlers
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -37,7 +34,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [InlineKeyboardButton("Support", callback_data="support")],
     ]
     await update.message.reply_text(
-        "💎 **EXCLUSIVESBYAJ!**\n\n"
+        "\U0001F48E **EXCLUSIVESBYAJ!**\n\n"
         "⚡ CHANNEL WITH AJ'S VIDS IN AND HIS COLLABS LIKE ZAYSTHEWAY! Access our Tele group with payment options below.\n\n"
         "⚡ ONLY £10 LIMITED TIME!.\n\n"
         "⚡ Pay with Apple Pay or Google Pay emailed instantly!.\n\n"
@@ -45,7 +42,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=InlineKeyboardMarkup(keyboard),
         parse_mode="Markdown",
     )
-
 
 async def handle_paypal(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
@@ -66,7 +62,6 @@ async def handle_paypal(update: Update, context: ContextTypes.DEFAULT_TYPE):
         parse_mode="Markdown",
     )
 
-
 async def handle_crypto(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
@@ -86,7 +81,6 @@ async def handle_crypto(update: Update, context: ContextTypes.DEFAULT_TYPE):
         parse_mode="Markdown",
     )
 
-
 async def handle_thank_you(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
@@ -94,7 +88,6 @@ async def handle_thank_you(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text="✅ **Thank you for your payment!**\n\nOur team will process your request shortly. Show payment to @zakivip1. If you paid with Apple Pay or Google Pay, it has been emailed to you.",
         parse_mode="Markdown",
     )
-
 
 async def handle_support(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
@@ -104,12 +97,10 @@ async def handle_support(update: Update, context: ContextTypes.DEFAULT_TYPE):
         parse_mode="Markdown",
     )
 
-
 async def handle_back(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     await start(query, context)
-
 
 @app.on_event("startup")
 async def startup_event():
@@ -123,13 +114,7 @@ async def startup_event():
     telegram_app.add_handler(CallbackQueryHandler(handle_support, pattern="support"))
 
     logger.info("Telegram Bot Initialized!")
-
-    async with httpx.AsyncClient() as client:
-        response = await client.get(UPTIME_MONITOR_URL)
-        logger.info(f"Uptime Monitoring Response: {response.status_code}")
-
     await telegram_app.initialize()
-
 
 @app.post("/webhook")
 async def webhook(request: Request):
@@ -137,19 +122,3 @@ async def webhook(request: Request):
     update = Update.de_json(await request.json(), telegram_app.bot)
     await telegram_app.process_update(update)
     return {"status": "ok"}
-
-
-@app.head("/uptime")
-async def uptime_head():
-    return Response(status_code=200)
-
-
-@app.get("/uptime")
-async def uptime_get():
-    current_time = datetime.now()
-    uptime_duration = current_time - START_TIME
-    return JSONResponse(content={
-        "status": "online",
-        "uptime": str(uptime_duration),
-        "start_time": START_TIME.strftime("%Y-%m-%d %H:%M:%S")
-    })
