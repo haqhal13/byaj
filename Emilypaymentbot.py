@@ -8,7 +8,6 @@ from fastapi.responses import JSONResponse, Response
 
 # Constants
 BOT_TOKEN = "8189375655:AAHsnhP49ZHqEK04uaEtcPeh3alikBhfVeY"
-UPTIME_MONITOR_URL = "https://emilysantvip.onrender.com/uptime"
 SUPPORT_CONTACT = "@ZakiVip1"
 ADMIN_CHAT_ID = 834523364  # Replace with the admin's chat ID
 
@@ -38,9 +37,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [InlineKeyboardButton("Support", callback_data="support")],
     ]
     await update.message.reply_text(
-        "💎 **HoneyPot & Emily Sant!**\n\n"
-        "⚡ 3 short videos + 1 lingerie pic included only! Access our Tele group with payment options below.\n\n"
-        "⚡ ONLY £5 LIMITED TIME!.\n\n"
+        "💎 **EXCLUSIVESBYAJ!**\n\n"
+        "⚡ CHANNEL WITH AJ'S VIDS IN AND HIS COLLABS LIKE ZAYSTHEWAY! Access our Tele group with payment options below.\n\n"
+        "⚡ ONLY £10 LIMITED TIME!.\n\n"
         "⚡ Pay with Apple Pay or Google Pay emailed instantly!.\n\n"
         "📌 Got questions? Contact support 🔍👀",
         reply_markup=InlineKeyboardMarkup(keyboard),
